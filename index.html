@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Songo Ewondo – Version Premium</title>
+  <!-- Importation d'une police moderne depuis Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ─── Variables et Thèmes CSS ────────────────────────────────────────────── */
+    :root {
+      --font-main: 'Outfit', sans-serif;
+      
+      /* Thème Acajou Classique (Défaut) */
+      --bg-gradient: radial-gradient(circle at center, #2d1b10 0%, #0c0704 100%);
+      --board-bg: linear-gradient(135deg, #7c4a27 0%, #4a2811 100%);
+      --board-border: #3b1e0b;
+      --board-shadow: rgba(0, 0, 0, 0.7);
+      --pit-bg: inset 4px 4px 10px rgba(0, 0, 0, 0.8), inset -2px -2px 5px rgba(255, 255, 255, 0.1), #2e170a;
+      --pit-hover: #1e3f20;
+      --seed-color: radial-gradient(circle at 35% 35%, #ffd28f 0%, #a66a38 70%, #5c3514 100%);
+      --seed-shadow: rgba(0, 0, 0, 0.5);
+      --accent-color: #ffd700;
+      --accent-glow: rgba(255, 215, 0, 0.3);
+      --text-main: #f5eedc;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --well-bg: inset 6px 6px 12px rgba(0,0,0,0.8), #231207;
+    }
+
+    [data-theme="obsidian"] {
+      --bg-gradient: radial-gradient(circle at center, #1a1a24 0%, #08080c 100%);
+      --board-bg: linear-gradient(135deg, #2c2d35 0%, #15161b 100%);
+      --board-border: #0e0f12;
+      --board-shadow: rgba(0, 0, 0, 0.8);
+      --pit-bg: inset 4px 4px 10px rgba(0, 0, 0, 0.9), inset -2px -2px 5px rgba(255, 255, 255, 0.05), #0f1013;
+      --pit-hover: #162c3d;
+      --seed-color: radial-gradient(circle at 35% 35%, #00ffcc 0%, #00887a 75%, #00332c 100%);
+      --seed-shadow: rgba(0, 255, 204, 0.3);
+      --accent-color: #00ffcc;
+      --accent-glow: rgba(0, 255, 204, 0.4);
+      --text-main: #e2e8f0;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --well-bg: inset 6px 6px 12px rgba(0,0,0,0.9), #0a0b0d;
+    }
+
+    [data-theme="emerald"] {
+      --bg-gradient: radial-gradient(circle at center, #0a1f14 0%, #020704 100%);
+      --board-bg: linear-gradient(135deg, #184c2a 0%, #0d2916 100%);
+      --board-border: #06130b;
+      --board-shadow: rgba(0, 0, 0, 0.75);
+      --pit-bg: inset 4px 4px 10px rgba(0, 0, 0, 0.8), inset -2px -2px 5px rgba(255, 255, 255, 0.08), #091a0f;
+      --pit-hover: #3d3b16;
+      --seed-color: radial-gradient(circle at 35% 35%, #fffdf0 0%, #cfb382 70%, #8c734b 100%);
+      --seed-shadow: rgba(0, 0, 0, 0.4);
+      --accent-color: #e5c158;
+      --accent-glow: rgba(229, 193, 88, 0.3);
+      --text-main: #e8f5e9;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --well-bg: inset 6px 6px 12px rgba(0,0,0,0.8), #06130b;
+    }
+
+    /* ─── Styles Globaux ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 1.5rem 1rem;
+      transition: background 0.5s ease;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #ffffff, var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: inline-block;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      font-weight: 300;
+      opacity: 0.7;
+      margin-top: 0.2rem;
+      letter-spacing: 1px;
+    }
+
+    /* ─── Boutons & Utilitaires ──────────────────────────────────────────────── */
+    .btn {
+      font-family: var(--font-main);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      color: #0c0704;
+      border: 1px solid var(--accent-color);
+    }
+
+    .btn-primary:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .btn-icon {
+      padding: 10px;
+      border-radius: 50%;
+      aspect-ratio: 1;
+    }
+
+    /* ─── Écrans / Vues ──────────────────────────────────────────────────────── */
+    .screen {
+      width: 100%;
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Écran d'accueil ─── */
+    .menu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .menu-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.8rem;
+    }
+
+    .menu-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: left;
+    }
+
+    .option-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      opacity: 0.6;
+      letter-spacing: 0.5px;
+    }
+
+    .theme-selector, .diff-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .selector-btn {
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .selector-btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .selector-btn.active {
+      background: var(--accent-color);
+      color: #111;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* ─── Barre de contrôle (Pendant le jeu) ─── */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 12px 24px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .game-status {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      text-shadow: 0 0 8px var(--accent-glow);
+      transition: all 0.3s;
+    }
+
+    /* ─── Tableau des scores ─── */
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .player-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .player-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: transparent;
+      transition: background 0.3s;
+    }
+
+    .player-card.active {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--accent-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .player-card.active::before {
+      background: var(--accent-color);
+    }
+
+    .player-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .player-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .player-role {
+      font-size: 0.75rem;
+      opacity: 0.5;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .player-score {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-color);
+    }
+
+    /* ─── PLATEAU DE JEU (Songo Board) ───────────────────────────────────────── */
+    .board-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      padding: 10px 0 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .songo-board {
+      background: var(--board-bg);
+      border: 8px solid var(--board-border);
+      border-radius: 28px;
+      padding: 24px;
+      display: flex;
+      gap: 20px;
+      box-shadow: 0 20px 45px var(--board-shadow),
+                  inset 0 2px 4px rgba(255,255,255,0.15),
+                  inset 0 -2px 4px rgba(0,0,0,0.4);
+      position: relative;
+      min-width: 950px;
+    }
+
+    /* Grenier / Magasin (Store Wells) */
+    .store-well {
+      width: 75px;
+      height: 180px;
+      border-radius: 40px;
+      background: var(--well-bg);
+      box-shadow: var(--pit-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 10px;
+    }
+
+    .store-well .store-count {
+      position: absolute;
+      top: -24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+
+    /* Grille Centrale */
+    .board-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-grow: 1;
+    }
+
+    .board-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      position: relative;
+    }
+
+    /* Les Trous (Pits) */
+    .pit-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .pit {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--well-bg);
+      box-shadow: var(--pit-bg);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .pit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+
+    /* États des trous */
+    .pit.active-playable:hover {
+      transform: scale(1.08);
+      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.9), 0 0 12px var(--accent-glow);
+    }
+    .pit.active-playable:hover::after {
+      border-color: var(--accent-color);
+    }
+
+    .pit.invalid-move {
+      cursor: not-allowed;
+    }
+    .pit.invalid-move:hover::after {
+      border-color: rgba(255, 0, 0, 0.4);
+    }
+
+    /* Animation lors de la sélection/semence */
+    .pit.selected-origin {
+      transform: scale(0.92);
+      box-shadow: inset 6px 6px 15px rgba(0,0,0,0.95);
+    }
+
+    .pit.sowing-active::after {
+      border-color: var(--accent-color);
+      animation: pulseGlow 0.4s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 2px var(--accent-glow); }
+      to { box-shadow: 0 0 10px var(--accent-glow); }
+    }
+
+    /* Compteur numérique des graines */
+    .pit-badge {
+      position: absolute;
+      bottom: -8px;
+      background: rgba(12, 7, 4, 0.85);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 5;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .pit.active-playable:hover .pit-badge {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+      transform: scale(1.1);
+    }
+
+    .pit.vide .pit-badge {
+      opacity: 0.3;
+    }
+
+    /* Graines physiques (Seeds) */
+    .seeds-layer {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .seed {
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--seed-color);
+      box-shadow: 1px 1px 3px var(--seed-shadow);
+      left: 50%;
+      top: 50%;
+      transform-origin: center;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 2;
+    }
+
+    /* ─── Fenêtres Modales / Overlays ───────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-gradient);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes scaleUp {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.8rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-body h3 {
+      color: var(--accent-color);
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .modal-body ul {
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .rules-illustrations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .rule-demo-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    /* ─── Notification flottante de coup ────────────────────────────────────── */
+    .warning-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(50px);
+      background: rgba(180, 40, 40, 0.95);
+      border: 1px solid rgba(255, 100, 100, 0.3);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 200;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+
+    .warning-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ─── Responsive adjustments ────────────────────────────────────────────── */
+    @media (max-width: 980px) {
+      .songo-board {
+        min-width: 900px;
+        padding: 16px;
+        gap: 12px;
+      }
+      .pit {
+        width: 64px;
+        height: 64px;
+      }
+      .store-well {
+        width: 60px;
+        height: 150px;
+      }
+      .seed {
+        width: 9px;
+        height: 9px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      .scoreboard { gap: 10px; }
+      .player-card { padding: 0.8rem 1rem; }
+      .player-score { font-size: 1.8rem; }
+      .controls-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- En-tête -->
+  <header>
+    <h1>🌍 Songo Ewondo</h1>
+    <p class="subtitle">Le jeu traditionnel de stratégie Ekang — Version locale Premium</p>
+  </header>
+
+  <!-- ─── ÉCRAN D'ACCUEIL (Menu de démarrage) ─────────────────────────────────── -->
+  <div id="home-screen" class="screen active">
+    <div class="menu-card">
+      <div class="menu-title">Nouvelle Partie</div>
+      
+      <div class="menu-options">
+        
+        <!-- Sélection du mode de jeu -->
+        <div class="option-group">
+          <label>Mode de Jeu</label>
+          <button class="btn btn-primary" id="btn-mode-ai" onclick="selectGameMode('ai')">🤖 Joueur vs Ordinateur</button>
+          <button class="btn" id="btn-mode-local" onclick="selectGameMode('local')">👥 Pass & Play (2 Joueurs)</button>
+        </div>
+
+        <!-- Sélection de la difficulté de l'IA -->
+        <div id="difficulty-group" class="option-group">
+          <label>Difficulté de l'IA</label>
+          <div class="diff-selector">
+            <button class="selector-btn" id="diff-easy" onclick="setAIDifficulty('easy')">Facile</button>
+            <button class="selector-btn active" id="diff-medium" onclick="setAIDifficulty('medium')">Moyen</button>
+            <button class="selector-btn" id="diff-hard" onclick="setAIDifficulty('hard')">Expert</button>
+          </div>
+        </div>
+
+        <!-- Thème Graphique -->
+        <div class="option-group">
+          <label>Thème Visuel</label>
+          <div class="theme-selector">
+            <button class="selector-btn active" id="theme-wood" onclick="changeTheme('wood')">Acajou</button>
+            <button class="selector-btn" id="theme-obsidian" onclick="changeTheme('obsidian')">Obsidian</button>
+            <button class="selector-btn" id="theme-emerald" onclick="changeTheme('emerald')">Émeraude</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 1rem;">
+        <button class="btn" style="flex: 1;" onclick="openRules()">📖 Règles</button>
+        <button class="btn btn-primary" style="flex: 1.5; font-size: 1rem;" id="btn-start" onclick="startGame()">Lancer le Jeu</button>
+      </div>
+      
+      <button class="btn" id="btn-resume" style="display: none; width: 100%;" onclick="resumeGame()">🔄 Reprendre la partie en cours</button>
+    </div>
+  </div>
+
+  <!-- ─── ÉCRAN DE JEU ────────────────────────────────────────────────────────── -->
+  <div id="game-screen" class="screen">
+    
+    <!-- Barre d'outils supérieure -->
+    <div class="controls-bar">
+      <div class="controls-left">
+        <button class="btn" onclick="goToMenu()">🏠 Menu</button>
+        <button class="btn" onclick="resetCurrentGame()">🔄 Recommencer</button>
+        <button class="btn btn-icon" id="btn-undo" onclick="undoMove()" title="Annuler le coup précédent">↩️</button>
+      </div>
+      <div class="game-status" id="status-label">C'est votre tour !</div>
+      <div class="controls-right">
+        <button class="btn btn-icon" id="btn-mute" onclick="toggleMute()" title="Activer/Couper le son">🔊</button>
+        <button class="btn btn-icon" onclick="openRules()" title="Afficher les règles">❓</button>
+      </div>
+    </div>
+
+    <!-- Tableau des scores -->
+    <div class="scoreboard">
+      <!-- Joueur 1 (Camp du bas) -->
+      <div class="player-card" id="card-p0">
+        <div class="player-info">
+          <div class="player-name" id="name-p0">Joueur 1</div>
+          <div class="player-role" id="role-p0">Votre camp (Bas)</div>
+        </div>
+        <div class="player-score" id="score-p0">0</div>
+      </div>
+      
+      <!-- Joueur 2 (Camp du haut) -->
+      <div class="player-card" id="card-p1">
+        <div class="player-info">
+          <div class="player-name" id="name-p1">Ordinateur (IA)</div>
+          <div class="player-role" id="role-p1">Camp adverse (Haut)</div>
+        </div>
+        <div class="player-score" id="score-p1">0</div>
+      </div>
+    </div>
+
+    <!-- Le Plateau de Songo -->
+    <div class="board-wrapper">
+      <div class="songo-board" id="game-board">
+        
+        <!-- Grenier J2 (Graines capturées par le Joueur 2 à gauche) -->
+        <div class="store-well" id="well-p1" title="Grenier de Joueur 2">
+          <span class="store-count">J2</span>
+          <!-- Les graines capturées s'accumulent ici -->
+        </div>
+
+        <!-- Zone centrale de la grille 2x7 -->
+        <div class="board-grid">
+          
+          <!-- Rangée du Haut (Joueur 2 / Adversaire) - Index de gauche à droite sur l'écran (c=0 à c=6),
+               mais le sens de distribution va de droite à gauche (6 -> 0). -->
+          <div class="board-row" id="row-1">
+            <!-- Rendu dynamique des trous par JS -->
+          </div>
+          
+          <!-- Rangée du Bas (Joueur 1 / Utilisateur) - Index de gauche à droite sur l'écran (c=0 à c=6),
+               sens de distribution de gauche à droite (0 -> 6). -->
+          <div class="board-row" id="row-0">
+            <!-- Rendu dynamique des trous par JS -->
+          </div>
+
+        </div>
+
+        <!-- Grenier J1 (Graines capturées par le Joueur 1 à droite) -->
+        <div class="store-well" id="well-p0" title="Grenier de Joueur 1">
+          <span class="store-count">J1</span>
+          <!-- Les graines capturées s'accumulent ici -->
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ─── MODALE : RÈGLES DU JEU ──────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-rules">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">📖 Règles du Songo Ewondo</div>
+      <button class="btn btn-icon" onclick="closeRules()">✖</button>
+    </div>
+    <div class="modal-body">
+      <p>Le <strong>Songo</strong> est un jeu traditionnel de stratégie mathématique de l'aire culturelle Ekang (Cameroun, Gabon, Guinée Équatoriale).</p>
+      
+      <h3>1. Le Plateau et le But</h3>
+      <ul>
+        <li>Le plateau contient <strong>2 rangées de 7 cases</strong> (trous). Chaque case contient initialement <strong>5 graines</strong> (soit 70 graines au total).</li>
+        <li><strong>But du jeu :</strong> Capturer le plus grand nombre de graines possible.</li>
+      </ul>
+
+      <h3>2. Le Déplacement (Les Semailles)</h3>
+      <ul>
+        <li>À votre tour, sélectionnez une case de votre camp (rangée du bas) qui contient des graines.</li>
+        <li>Prenez toutes les graines et distribuez-les une par une dans les cases suivantes en sens <strong>anti-horaire</strong> (gauche à droite en bas, puis droite à gauche en haut).</li>
+        <li><strong>Saut de case (Grande Boucle) :</strong> Si une case contient <strong>14 graines ou plus</strong>, sa distribution fera un tour complet. La case de départ est alors <strong>sautée</strong> (elle reste vide à la fin).</li>
+      </ul>
+
+      <h3>3. Les Captures (Prises)</h3>
+      <ul>
+        <li>La capture a lieu si votre dernière graine tombe dans le <strong>camp adverse</strong> et que cette case contient alors <strong>2 ou 3 graines</strong> (graine déposée incluse).</li>
+        <li><strong>Prises en cascade (rétrogrades) :</strong> Si cette capture réussit, on regarde la case précédente (dans le sens horaire inversé). Si elle appartient toujours à l'adversaire et contient 2 ou 3 graines, elle est également capturée, et ainsi de suite.</li>
+        <li><strong>Règle d'Éthique (Non-affamement) :</strong> Il est strictement interdit d'affamer l'adversaire. Si votre capture vide totalement le camp de l'adversaire, <strong>la capture est annulée</strong> (les graines restent sur le plateau pour lui permettre de jouer).</li>
+      </ul>
+
+      <h3>4. Alimenter l'Adversaire (Nourrir)</h3>
+      <ul>
+        <li>Si l'adversaire n'a plus aucune graine dans son camp à la fin de son tour, vous êtes <strong>obligé</strong> de jouer un coup qui lui envoie au moins une graine (le nourrir).</li>
+        <li>Si vous ne possédez aucun coup capable d'amener une graine dans son camp, la partie se termine. Vous ramassez alors toutes les graines restantes de votre camp, et on compare les scores.</li>
+      </ul>
+
+      <div class="rules-illustrations">
+        <div class="rule-demo-card">
+          <strong>2 ou 3 Graines</strong>
+          <p style="font-size:0.75rem; opacity:0.7; margin-top:4px;">Seuils nécessaires pour capturer une case adverse.</p>
+        </div>
+        <div class="rule-demo-card">
+          <strong>Non-Affamement</strong>
+          <p style="font-size:0.75rem; opacity:0.7; margin-top:4px;">Si tout le camp adverse est capturé, la prise est annulée.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <button class="btn btn-primary" onclick="closeRules()">Compris !</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODALE : FIN DE PARTIE ──────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-gameover">
+  <div class="modal-box" style="max-width: 400px; text-align: center;">
+    <div class="modal-header" style="border:none; justify-content: center;">
+      <div class="modal-title" id="go-title" style="font-size: 1.8rem; text-align: center;">Partie terminée</div>
+    </div>
+    <div class="modal-body">
+      <div id="go-icon" style="font-size: 4.5rem; margin: 10px 0;">🏆</div>
+      <p id="go-msg" style="font-size: 1.1rem; font-weight: 600;"></p>
+      <p id="go-details" style="opacity: 0.7;"></p>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <button class="btn" style="flex:1;" onclick="closeGameOverModal(); goToMenu();">Menu</button>
+      <button class="btn btn-primary" style="flex:1.5;" onclick="closeGameOverModal(); resetCurrentGame();">Rejouer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Toast -->
+<div class="warning-toast" id="warning-toast">Vous devez nourrir l'adversaire !</div>
+
+<!-- ─── CODE JAVASCRIPT DU JEU (Offline-First) ──────────────────────────────── -->
+<script>
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Variables d'état global du jeu
+  // ═══════════════════════════════════════════════════════════════════════════
+  let board = [
+    [5, 5, 5, 5, 5, 5, 5], // J1 (Bas, index 0..6)
+    [5, 5, 5, 5, 5, 5, 5]  // J2 (Haut, index 0..6)
+  ];
+  let scores = [0, 0];      // [Score J1, Score J2]
+  let currentPlayer = 0;    // 0 ou 1
+  let gameMode = 'ai';      // 'ai' ou 'local'
+  let aiDifficulty = 'medium'; // 'easy', 'medium', 'hard'
+  let activeTheme = 'wood';
+  let isMuted = false;
+  let isAnimating = false;
+  let gameOver = false;
+  
+  // Historique pour le bouton Undo
+  let gameHistory = [];
+
+  // Audio Context pour la synthèse sonore (Web Audio API)
+  let audioCtx = null;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Distribution des graines en spirale de Fermat (Positionnement organique)
+  // ═══════════════════════════════════════════════════════════════════════════
+  const SEED_POSITIONS = [];
+  // Générer des coordonnées de graines précalculées pour éviter tout jittering (sautement) lors du rafraîchissement
+  for (let i = 0; i < 120; i++) {
+    const goldenAngle = 2.39996; // angle d'or en radians
+    const scale = 3.6;           // espacement entre graines
+    const theta = i * goldenAngle;
+    const r = 4 + Math.sqrt(i) * scale;
+    // Garder les billes dans un rayon maximal de 24px par rapport au centre du trou (diamètre 76px)
+    const maxRadius = 24;
+    const finalR = Math.min(r, maxRadius);
+    SEED_POSITIONS.push({
+      x: finalR * Math.cos(theta),
+      y: finalR * Math.sin(theta),
+      rot: (i * 73) % 360 // orientation aléatoire constante
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Initialisation de l'application
+  // ═══════════════════════════════════════════════════════════════════════════
+  window.onload = function() {
+    // Restaurer les préférences si existantes
+    const savedTheme = localStorage.getItem('songo_theme') || 'wood';
+    changeTheme(savedTheme);
+    
+    const savedMute = localStorage.getItem('songo_muted') === 'true';
+    if (savedMute) toggleMute();
+
+    // Vérifier s'il y a une partie sauvegardée
+    if (localStorage.getItem('songo_saved_state')) {
+      document.getElementById('btn-resume').style.display = 'block';
+    }
+    
+    // Générer la structure HTML du plateau
+    renderBoardBaseHTML();
+  };
+
+  // Rendu de la grille vide du plateau (les trous) dans le DOM
+  function renderBoardBaseHTML() {
+    const row1 = document.getElementById('row-1');
+    const row0 = document.getElementById('row-0');
+    
+    row1.innerHTML = '';
+    row0.innerHTML = '';
+
+    // Rangée 1 (Haut, J2) : Visuellement de gauche à droite (col 0 à 6)
+    for (let c = 0; c < 7; c++) {
+      const pitContainer = document.createElement('div');
+      pitContainer.className = 'pit-container';
+      
+      const label = document.createElement('span');
+      label.style.fontSize = '0.65rem';
+      label.style.opacity = '0.4';
+      label.textContent = `H${7 - c}`; // Numérotation locale traditionnelle (1 à 7 de droite à gauche)
+      
+      const pit = document.createElement('div');
+      pit.className = 'pit';
+      pit.id = `pit-1-${c}`;
+      pit.onclick = () => onPitClick(1, c);
+      
+      const seedsLayer = document.createElement('div');
+      seedsLayer.className = 'seeds-layer';
+      seedsLayer.id = `seeds-1-${c}`;
+      pit.appendChild(seedsLayer);
+      
+      const badge = document.createElement('span');
+      badge.className = 'pit-badge';
+      badge.id = `badge-1-${c}`;
+      pit.appendChild(badge);
+      
+      pitContainer.appendChild(pit);
+      pitContainer.appendChild(label);
+      row1.appendChild(pitContainer);
+    }
+
+    // Rangée 0 (Bas, J1) : Visuellement de gauche à droite (col 0 à 6)
+    for (let c = 0; c < 7; c++) {
+      const pitContainer = document.createElement('div');
+      pitContainer.className = 'pit-container';
+      
+      const label = document.createElement('span');
+      label.style.fontSize = '0.65rem';
+      label.style.opacity = '0.4';
+      label.textContent = `B${c + 1}`; // Numérotation locale (1 à 7)
+      
+      const pit = document.createElement('div');
+      pit.className = 'pit';
+      pit.id = `pit-0-${c}`;
+      pit.onclick = () => onPitClick(0, c);
+      
+      const seedsLayer = document.createElement('div');
+      seedsLayer.className = 'seeds-layer';
+      seedsLayer.id = `seeds-0-${c}`;
+      pit.appendChild(seedsLayer);
+      
+      const badge = document.createElement('span');
+      badge.className = 'pit-badge';
+      badge.id = `badge-0-${c}`;
+      pit.appendChild(badge);
+      
+      pitContainer.appendChild(label);
+      pitContainer.appendChild(pit);
+      row0.appendChild(pitContainer);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Synthétiseur Audio (Web Audio API)
+  // ═══════════════════════════════════════════════════════════════════════════
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  // Jouer le bruit sec d'une graine de bois ("clack")
+  function playClackSound() {
+    if (isMuted) return;
+    initAudio();
+    
+    try {
+      const osc = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+      
+      // Fréquences pour simuler la résonance du bois sec
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(420, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.08);
+      
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(840, audioCtx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(280, audioCtx.currentTime + 0.04);
+      
+      // Filtrage passe-bande pour affiner le timbre
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+      filter.Q.setValueAtTime(4, audioCtx.currentTime);
+      
+      // Enveloppe d'amplitude très courte (percussion rapide)
+      gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 0.08);
+      
+      osc.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      osc.start();
+      osc2.start();
+      osc.stop(audioCtx.currentTime + 0.09);
+      osc2.stop(audioCtx.currentTime + 0.09);
+    } catch(e) {
+      console.warn("Audio non supporté ou non initialisé :", e);
+    }
+  }
+
+  // Jouer un son plus aigu et festif en cas de capture réussie
+  function playCaptureSound() {
+    if (isMuted) return;
+    initAudio();
+    
+    try {
+      const time = audioCtx.currentTime;
+      // Double son successif rapide
+      for (let i = 0; i < 2; i++) {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520 + (i * 200), time + (i * 0.06));
+        osc.frequency.exponentialRampToValueAtTime(260 + (i * 100), time + (i * 0.06) + 0.15);
+        
+        gainNode.gain.setValueAtTime(0.12, time + (i * 0.06));
+        gainNode.gain.exponentialRampToValueAtTime(0.005, time + (i * 0.06) + 0.15);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.start(time + (i * 0.06));
+        osc.stop(time + (i * 0.06) + 0.16);
+      }
+    } catch(e) {
+      console.warn("Audio error :", e);
+    }
+  }
+
+  // Couper/activer le son
+  function toggleMute() {
+    isMuted = !isMuted;
+    localStorage.setItem('songo_muted', isMuted);
+    const btn = document.getElementById('btn-mute');
+    btn.textContent = isMuted ? '🔇' : '🔊';
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Changement de Thème Visuel
+  // ═══════════════════════════════════════════════════════════════════════════
+  function changeTheme(themeName) {
+    activeTheme = themeName;
+    document.documentElement.setAttribute('data-theme', themeName);
+    localStorage.setItem('songo_theme', themeName);
+    
+    // Mettre à jour l'affichage des boutons sélecteurs de thème
+    document.querySelectorAll('.theme-selector .selector-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const targetBtn = document.getElementById(`theme-${themeName}`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Modales & Vues navigation
+  // ═══════════════════════════════════════════════════════════════════════════
+  function selectGameMode(mode) {
+    gameMode = mode;
+    document.getElementById('btn-mode-ai').className = mode === 'ai' ? 'btn btn-primary' : 'btn';
+    document.getElementById('btn-mode-local').className = mode === 'local' ? 'btn btn-primary' : 'btn';
+    
+    // Afficher ou masquer la section Difficulté si mode IA ou Local
+    document.getElementById('difficulty-group').style.display = mode === 'ai' ? 'flex' : 'none';
+  }
+
+  function setAIDifficulty(diff) {
+    aiDifficulty = diff;
+    document.querySelectorAll('.diff-selector .selector-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.getElementById(`diff-${diff}`).classList.add('active');
+  }
+
+  function openRules() {
+    document.getElementById('modal-rules').classList.add('show');
+  }
+
+  function closeRules() {
+    document.getElementById('modal-rules').classList.remove('show');
+  }
+
+  function openGameOverModal(title, msg, details, icon = '🏆') {
+    document.getElementById('go-title').textContent = title;
+    document.getElementById('go-msg').textContent = msg;
+    document.getElementById('go-details').textContent = details;
+    document.getElementById('go-icon').textContent = icon;
+    document.getElementById('modal-gameover').classList.add('show');
+  }
+
+  function closeGameOverModal() {
+    document.getElementById('modal-gameover').classList.remove('show');
+  }
+
+  function showWarning(text) {
+    const toast = document.getElementById('warning-toast');
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+
+  function goToMenu() {
+    document.getElementById('game-screen').classList.remove('active');
+    document.getElementById('home-screen').classList.add('active');
+    
+    // Afficher bouton de reprise si partie commencée
+    if (!gameOver) {
+      document.getElementById('btn-resume').style.display = 'block';
+    } else {
+      document.getElementById('btn-resume').style.display = 'none';
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Moteur Logique de Songo Ewondo
+  // ═══════════════════════════════════════════════════════════════════════════
+  
+  // Retourne la case suivante dans le sens anti-horaire
+  function nextHouse(r, c) {
+    if (r === 0) { // Bas
+      if (c < 6) return { r: 0, c: c + 1 }; // Gauche à Droite
+      else return { r: 1, c: 6 };           // Monte à droite
+    } else { // Haut
+      if (c > 0) return { r: 1, c: c - 1 }; // Droite à Gauche
+      else return { r: 0, c: 0 };           // Descend à gauche
+    }
+  }
+
+  // Retourne la case précédente (sens horaire pour capture en cascade)
+  function prevHouse(r, c) {
+    if (r === 0) { // Bas
+      if (c > 0) return { r: 0, c: c - 1 }; // Recule à gauche
+      else return { r: 1, c: 0 };           // Monte par la gauche
+    } else { // Haut
+      if (c < 6) return { r: 1, c: c + 1 }; // Recule à droite
+      else return { r: 0, c: 6 };           // Descend par la droite
+    }
+  }
+
+  // Vérifie si un coup à partir de (player, col) amène au moins une graine dans le camp adverse
+  function moveFeedsAdversary(boardState, player, col) {
+    const b = JSON.parse(JSON.stringify(boardState));
+    let seeds = b[player][col];
+    let r = player, c = col;
+    b[player][col] = 0;
+    
+    const skipStart = (seeds >= 14);
+    
+    while (seeds > 0) {
+      let next = nextHouse(r, c);
+      if (skipStart && next.r === player && next.c === col) {
+        r = next.r;
+        c = next.c;
+        continue; // Sauter la case de départ
+      }
+      r = next.r;
+      c = next.c;
+      if (r === 1 - player) {
+        return true; // Au moins une graine arrive chez l'adversaire
+      }
+      seeds--;
+    }
+    return false;
+  }
+
+  // Récupère la liste des coups valides pour un joueur
+  function getValidMoves(boardState, player) {
+    let moves = [];
+    
+    // 1. Identifier les cases non vides du joueur
+    for (let c = 0; c < 7; c++) {
+      if (boardState[player][c] > 0) {
+        moves.push(c);
+      }
+    }
+    
+    // 2. Vérifier si l'adversaire a des graines
+    const adversary = 1 - player;
+    const isAdversaryStarved = boardState[adversary].every(s => s === 0);
+    
+    if (isAdversaryStarved) {
+      // Le joueur est OBLIGÉ de nourrir l'adversaire s'il le peut
+      let feedingMoves = moves.filter(col => moveFeedsAdversary(boardState, player, col));
+      if (feedingMoves.length > 0) {
+        return feedingMoves; // Seuls les coups qui nourrissent sont autorisés
+      }
+    }
+    
+    return moves; // Sinon, tous les coups non vides sont valides
+  }
+
+  // Simule un coup complet sur un plateau donné et renvoie l'état modifié
+  // Utile pour l'IA et l'évaluation stratégique
+  function simulateMove(boardState, scoresState, player, col) {
+    const nextB = JSON.parse(JSON.stringify(boardState));
+    const nextS = [...scoresState];
+    const adversary = 1 - player;
+    
+    let seeds = nextB[player][col];
+    nextB[player][col] = 0;
+    
+    let r = player, c = col;
+    const skipStart = (seeds >= 14);
+    
+    while (seeds > 0) {
+      let next = nextHouse(r, c);
+      if (skipStart && next.r === player && next.c === col) {
+        r = next.r;
+        c = next.c;
+        continue;
+      }
+      r = next.r;
+      c = next.c;
+      nextB[r][c]++;
+      seeds--;
+    }
+    
+    // Logique de capture
+    if (r === adversary) {
+      let currR = r, currC = c;
+      let captureCandidates = [];
+      
+      // Cascade rétrograde (sens horaire inversé) chez l'adversaire
+      while (currR === adversary && (nextB[currR][currC] === 2 || nextB[currR][currC] === 3)) {
+        captureCandidates.push({ r: currR, c: currC, val: nextB[currR][currC] });
+        let prev = prevHouse(currR, currC);
+        currR = prev.r;
+        currC = prev.c;
+      }
+      
+      if (captureCandidates.length > 0) {
+        // Règle de non-affamement : compter si on vide tout le camp
+        const totalAdversarySeeds = nextB[adversary].reduce((sum, s) => sum + s, 0);
+        const candidatesSum = captureCandidates.reduce((sum, h) => sum + h.val, 0);
+        
+        if (candidatesSum < totalAdversarySeeds) {
+          // Si on n'affame pas, on capture
+          for (let h of captureCandidates) {
+            nextS[player] += nextB[h.r][h.c];
+            nextB[h.r][h.c] = 0;
+          }
+        }
+      }
+    }
+    
+    return { board: nextB, scores: nextS };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Début et reprise du jeu
+  // ═══════════════════════════════════════════════════════════════════════════
+  function startGame() {
+    // Initialiser un plateau neuf
+    board = [
+      [5, 5, 5, 5, 5, 5, 5],
+      [5, 5, 5, 5, 5, 5, 5]
+    ];
+    scores = [0, 0];
+    currentPlayer = 0;
+    gameOver = false;
+    isAnimating = false;
+    gameHistory = [];
+
+    // Paramétrer les noms
+    if (gameMode === 'ai') {
+      document.getElementById('name-p0').textContent = 'Joueur 1';
+      document.getElementById('role-p0').textContent = 'Votre camp (Bas)';
+      document.getElementById('name-p1').textContent = `Ordinateur (${getDifficultyLabel()})`;
+      document.getElementById('role-p1').textContent = 'Camp adverse (Haut)';
+    } else {
+      document.getElementById('name-p0').textContent = 'Joueur 1 (Local)';
+      document.getElementById('role-p0').textContent = 'Camp du Bas';
+      document.getElementById('name-p1').textContent = 'Joueur 2 (Local)';
+      document.getElementById('role-p1').textContent = 'Camp du Haut';
+    }
+
+    // Basculer d'écran
+    document.getElementById('home-screen').classList.remove('active');
+    document.getElementById('game-screen').classList.add('active');
+
+    updateUI();
+    saveGameState();
+  }
+
+  function getDifficultyLabel() {
+    if (aiDifficulty === 'easy') return 'Facile';
+    if (aiDifficulty === 'medium') return 'Moyen';
+    return 'Expert';
+  }
+
+  // Reprendre la partie depuis le localStorage
+  function resumeGame() {
+    const stateStr = localStorage.getItem('songo_saved_state');
+    if (!stateStr) return;
+    
+    try {
+      const state = JSON.parse(stateStr);
+      board = state.board;
+      scores = state.scores;
+      currentPlayer = state.currentPlayer;
+      gameMode = state.gameMode;
+      aiDifficulty = state.aiDifficulty;
+      gameHistory = state.gameHistory || [];
+      gameOver = state.gameOver || false;
+      isAnimating = false;
+
+      // Restaurer les boutons sélecteurs du menu d'accueil
+      selectGameMode(gameMode);
+      setAIDifficulty(aiDifficulty);
+
+      // Mettre à jour les étiquettes de rôles
+      if (gameMode === 'ai') {
+        document.getElementById('name-p0').textContent = 'Joueur 1';
+        document.getElementById('role-p0').textContent = 'Votre camp (Bas)';
+        document.getElementById('name-p1').textContent = `Ordinateur (${getDifficultyLabel()})`;
+        document.getElementById('role-p1').textContent = 'Camp adverse (Haut)';
+      } else {
+        document.getElementById('name-p0').textContent = 'Joueur 1 (Local)';
+        document.getElementById('role-p0').textContent = 'Camp du Bas';
+        document.getElementById('name-p1').textContent = 'Joueur 2 (Local)';
+        document.getElementById('role-p1').textContent = 'Camp du Haut';
+      }
+
+      document.getElementById('home-screen').classList.remove('active');
+      document.getElementById('game-screen').classList.add('active');
+
+      updateUI();
+    } catch(e) {
+      console.error("Erreur de reprise :", e);
+      showWarning("Impossible de restaurer la partie.");
+    }
+  }
+
+  // Sauvegarder l'état actuel de la partie
+  function saveGameState() {
+    const state = {
+      board,
+      scores,
+      currentPlayer,
+      gameMode,
+      aiDifficulty,
+      gameHistory,
+      gameOver
+    };
+    localStorage.setItem('songo_saved_state', JSON.stringify(state));
+  }
+
+  // Recommencer la partie actuelle
+  function resetCurrentGame() {
+    startGame();
+  }
+
+  // Annuler le dernier coup joué
+  function undoMove() {
+    if (isAnimating || gameHistory.length === 0) return;
+
+    // Récupérer le dernier état historisé
+    const previousState = gameHistory.pop();
+    board = previousState.board;
+    scores = previousState.scores;
+    currentPlayer = previousState.currentPlayer;
+    gameOver = false;
+
+    updateUI();
+    saveGameState();
+    
+    // Si on joue contre l'IA, annuler aussi le coup de l'IA nécessite d'annuler de 2 étapes
+    if (gameMode === 'ai' && currentPlayer === 1 && gameHistory.length > 0) {
+      undoMove(); // Récursion pour revenir au tour de l'humain
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Mise à jour et rendu graphique de l'interface (UI)
+  // ═══════════════════════════════════════════════════════════════════════════
+  function updateUI() {
+    // 1. Mettre à jour les scores textuels
+    document.getElementById('score-p0').textContent = scores[0];
+    document.getElementById('score-p1').textContent = scores[1];
+
+    // 2. Mettre à jour l'état actif des cartes joueurs
+    document.getElementById('card-p0').className = (currentPlayer === 0 && !gameOver) ? 'player-card active' : 'player-card';
+    document.getElementById('card-p1').className = (currentPlayer === 1 && !gameOver) ? 'player-card active' : 'player-card';
+
+    // 3. Calculer les coups valides pour surligner les cases cliquables
+    const validMoves = getValidMoves(board, currentPlayer);
+
+    // 4. Mettre à jour tous les trous du plateau
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 7; c++) {
+        const pit = document.getElementById(`pit-${r}-${c}`);
+        const val = board[r][c];
+        
+        // Gérer les classes CSS
+        pit.className = 'pit';
+        if (val === 0) pit.classList.add('vide');
+
+        // Mettre à jour le badge numérique
+        document.getElementById(`badge-${r}-${c}`).textContent = val;
+
+        // Est-il cliquable ?
+        // Uniquement si c'est le tour de ce camp, que la case n'est pas vide,
+        // que ce n'est pas l'ordinateur qui joue, qu'on n'est pas en animation
+        // et que le coup respecte la règle de nourriture.
+        const isCampOfCurrent = (r === currentPlayer);
+        const isMoveValid = validMoves.includes(c);
+        const isHumanTurn = (gameMode === 'local' || currentPlayer === 0);
+
+        if (isHumanTurn && isCampOfCurrent && val > 0 && !isAnimating && !gameOver) {
+          if (isMoveValid) {
+            pit.classList.add('active-playable');
+          } else {
+            pit.classList.add('invalid-move');
+          }
+        }
+
+        // Dessiner les graines de bois dans le trou
+        renderSeedsInPit(r, c, val);
+      }
+    }
+
+    // 5. Mettre à jour les greniers (magasins de capture)
+    renderCapturedSeedsInWell(0, scores[0]);
+    renderCapturedSeedsInWell(1, scores[1]);
+
+    // 6. Message de statut
+    const statusLabel = document.getElementById('status-label');
+    if (gameOver) {
+      statusLabel.textContent = "Partie terminée !";
+      statusLabel.style.color = "var(--accent-color)";
+    } else {
+      const activeName = currentPlayer === 0 ? "Joueur 1" : (gameMode === 'ai' ? "Ordinateur" : "Joueur 2");
+      const isAdversaryEmpty = board[1 - currentPlayer].every(s => s === 0);
+      
+      if (isAdversaryEmpty) {
+        statusLabel.textContent = `⚠️ ${activeName} doit nourrir l'adversaire !`;
+        statusLabel.style.color = "#ff4d4d";
+      } else {
+        statusLabel.textContent = currentPlayer === 0 ? "À vous de jouer !" : `Tour de : ${activeName}`;
+        statusLabel.style.color = "var(--text-main)";
+      }
+    }
+
+    // Gérer l'opacité du bouton Undo
+    const undoBtn = document.getElementById('btn-undo');
+    undoBtn.style.opacity = (gameHistory.length > 0 && !isAnimating && !gameOver) ? '1' : '0.3';
+    undoBtn.style.cursor = (gameHistory.length > 0 && !isAnimating && !gameOver) ? 'pointer' : 'not-allowed';
+  }
+
+  // Rendu physique des graines sous forme de billes 3D dans le trou
+  function renderSeedsInPit(r, c, count) {
+    const layer = document.getElementById(`seeds-${r}-${c}`);
+    const currentRendered = layer.children.length;
+
+    // Si le nombre correspond déjà, on ne touche à rien (évite de réinitialiser les animations)
+    if (currentRendered === count) return;
+
+    layer.innerHTML = '';
+    
+    // Déterminer la taille et la densité selon le nombre de graines pour ne pas dépasser
+    let seedSize = 11;
+    if (count > 12) seedSize = 9;
+    if (count > 25) seedSize = 7.5;
+
+    for (let i = 0; i < count; i++) {
+      const seed = document.createElement('div');
+      seed.className = 'seed';
+      
+      // Positionnement organique basé sur la spirale précalculée
+      const pos = SEED_POSITIONS[i] || { x: 0, y: 0, rot: 0 };
+      
+      seed.style.width = `${seedSize}px`;
+      seed.style.height = `${seedSize}px`;
+      
+      // Centrer par rapport au milieu du trou
+      seed.style.transform = `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) rotate(${pos.rot}deg)`;
+      
+      // Petit effet d'apparition fluide
+      if (i >= currentRendered) {
+        seed.style.opacity = '0';
+        seed.style.scale = '0';
+        setTimeout(() => {
+          seed.style.opacity = '1';
+          seed.style.scale = '1';
+        }, 30);
+      }
+      
+      layer.appendChild(seed);
+    }
+  }
+
+  // Remplir visuellement les magasins de capture (greniers) sur les côtés
+  function renderCapturedSeedsInWell(player, score) {
+    const well = document.getElementById(`well-p${player}`);
+    
+    // Supprimer les graines existantes (hors labels)
+    const existingSeeds = well.querySelectorAll('.seed');
+    if (existingSeeds.length === score) return;
+
+    existingSeeds.forEach(s => s.remove());
+
+    // Afficher des graines de façon compacte dans le grenier
+    // On dessine un maximum de 30 graines pour des raisons visuelles, mais le score texte fait foi
+    const seedsToShow = Math.min(score, 32);
+    
+    for (let i = 0; i < seedsToShow; i++) {
+      const seed = document.createElement('div');
+      seed.className = 'seed';
+      
+      // Répartition étirée verticalement pour remplir le grenier ovale
+      const row = Math.floor(i / 3);
+      const col = i % 3;
+      
+      const offsetX = (col - 1) * 14 + (Math.sin(row) * 3);
+      const offsetY = (row - 5) * 11 + (col * 2);
+      const rot = (i * 83) % 360;
+      
+      seed.style.width = '9px';
+      seed.style.height = '9px';
+      seed.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) rotate(${rot}deg)`;
+      
+      well.appendChild(seed);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Interaction utilisateur & Déroulement du coup
+  // ═══════════════════════════════════════════════════════════════════════════
+  function onPitClick(r, c) {
+    // Ignorer si ce n'est pas le tour de l'humain, ou si c'est en cours d'animation
+    if (isAnimating || gameOver) return;
+    if (gameMode === 'ai' && currentPlayer !== 0) return;
+    
+    // Le joueur ne peut cliquer que dans sa rangée
+    if (r !== currentPlayer) return;
+    
+    // Vérifier les coups valides
+    const validMoves = getValidMoves(board, currentPlayer);
+    if (!validMoves.includes(c)) {
+      if (board[r][c] === 0) {
+        showWarning("Cette case est vide !");
+      } else {
+        // C'est un coup invalide car il n'alimente pas l'adversaire affamé
+        showWarning("Coup interdit : vous devez nourrir l'adversaire !");
+        playClackSound();
+      }
+      return;
+    }
+
+    // Exécuter le coup
+    executeMove(c);
+  }
+
+  // Exécute et anime le coup pour le joueur courant
+  async function executeMove(col) {
+    isAnimating = true;
+    
+    // Enregistrer l'état dans l'historique pour Undo
+    gameHistory.push({
+      board: JSON.parse(JSON.stringify(board)),
+      scores: [...scores],
+      currentPlayer: currentPlayer
+    });
+
+    const activePlayer = currentPlayer;
+    const adversary = 1 - activePlayer;
+    
+    let seeds = board[activePlayer][col];
+    board[activePlayer][col] = 0;
+
+    // Visualisation de l'origine sélectionnée
+    const originPit = document.getElementById(`pit-${activePlayer}-${col}`);
+    originPit.classList.add('selected-origin');
+
+    let r = activePlayer;
+    let c = col;
+    
+    // Règle de la grande boucle : si seeds >= 14, on sautera le départ
+    const skipStart = (seeds >= 14);
+
+    updateUI();
+
+    // Semer pas-à-pas avec bruitages et animations
+    while (seeds > 0) {
+      await sleep(220); // Vitesse des semailles
+      
+      let next = nextHouse(r, c);
+      if (skipStart && next.r === activePlayer && next.c === col) {
+        r = next.r;
+        c = next.c;
+        continue; // Passer la case d'origine
+      }
+
+      r = next.r;
+      c = next.c;
+      board[r][c]++;
+      seeds--;
+
+      // Effet visuel temporaire sur la case semée
+      const currentPit = document.getElementById(`pit-${r}-${c}`);
+      currentPit.classList.add('sowing-active');
+      setTimeout(() => currentPit.classList.remove('sowing-active'), 200);
+
+      playClackSound();
+      updateUI();
+    }
+
+    await sleep(350); // Pause après semailles
+    originPit.classList.remove('selected-origin');
+
+    // ── Logique de Capture ──
+    let totalCaptured = 0;
+    if (r === adversary) {
+      let currR = r;
+      let currC = c;
+      let captureCandidates = [];
+
+      // Analyse rétrograde (sens horaire) dans le camp adverse
+      while (currR === adversary && (board[currR][currC] === 2 || board[currR][currC] === 3)) {
+        captureCandidates.push({ r: currR, c: currC, val: board[currR][currC] });
+        let prev = prevHouse(currR, currC);
+        currR = prev.r;
+        currC = prev.c;
+      }
+
+      if (captureCandidates.length > 0) {
+        // Appliquer la règle de non-affamement
+        const totalAdversarySeeds = board[adversary].reduce((sum, s) => sum + s, 0);
+        const candidatesSum = captureCandidates.reduce((sum, h) => sum + h.val, 0);
+
+        if (candidatesSum === totalAdversarySeeds) {
+          // Affamement détecté : capture interdite, les graines restent
+          showWarning("Affamement interdit ! Capture annulée.");
+        } else {
+          // Effectuer la capture réelle
+          playCaptureSound();
+          for (let h of captureCandidates) {
+            totalCaptured += board[h.r][h.c];
+            board[h.r][h.c] = 0;
+            
+            // Animation flash sur les cases capturées
+            const pitEl = document.getElementById(`pit-${h.r}-${h.c}`);
+            pitEl.style.backgroundColor = 'rgba(255,215,0,0.1)';
+            setTimeout(() => pitEl.style.backgroundColor = '', 400);
+          }
+          scores[activePlayer] += totalCaptured;
+        }
+      }
+    }
+
+    // Nettoyage de l'état d'animation
+    isAnimating = false;
+    updateUI();
+
+    // ── Changement de Tour / Fin de Partie ──
+    checkGameStatusTransition();
+  }
+
+  // Analyse l'état du plateau après un coup et planifie la suite
+  function checkGameStatusTransition() {
+    // Changement de joueur
+    currentPlayer = 1 - currentPlayer;
+    saveGameState();
+
+    // Vérifier la fin de partie pour le nouveau joueur actif
+    const validMoves = getValidMoves(board, currentPlayer);
+
+    if (validMoves.length === 0) {
+      // Le joueur ne peut plus jouer (soit camp vide, soit bloqué par la nourriture)
+      // La partie se termine. L'autre joueur récupère toutes ses graines restantes.
+      const luckyPlayer = 1 - currentPlayer;
+      let remainingSeeds = 0;
+      
+      for (let c = 0; c < 7; c++) {
+        remainingSeeds += board[luckyPlayer][c];
+        board[luckyPlayer][c] = 0;
+      }
+      
+      scores[luckyPlayer] += remainingSeeds;
+      gameOver = true;
+      updateUI();
+      
+      // Déterminer le gagnant
+      announceWinner();
+      return;
+    }
+
+    // Si mode IA et que c'est le tour de l'ordinateur, déclencher son calcul
+    if (gameMode === 'ai' && currentPlayer === 1 && !gameOver) {
+      setTimeout(playAICoup, 800); // Temps de réflexion simulé
+    }
+  }
+
+  // Annoncer le gagnant dans la modale
+  function announceWinner() {
+    let title = "Égalité !";
+    let msg = "";
+    let details = `Score final : J1 (${scores[0]}) - J2 (${scores[1]})`;
+    let icon = "🤝";
+
+    if (scores[0] > scores[1]) {
+      title = "Victoire !";
+      msg = gameMode === 'ai' ? "Félicitations, vous avez battu l'ordinateur !" : "Joueur 1 remporte la partie !";
+      icon = "🏆";
+    } else if (scores[1] > scores[0]) {
+      title = "Défaite !";
+      msg = gameMode === 'ai' ? "L'ordinateur a gagné. Retentez votre chance !" : "Joueur 2 remporte la partie !";
+      icon = "🤖";
+    } else {
+      msg = "Beau match ! Personne ne prend l'avantage.";
+    }
+
+    // Supprimer la sauvegarde pour ne pas boucler dessus
+    localStorage.removeItem('songo_saved_state');
+    document.getElementById('btn-resume').style.display = 'none';
+
+    openGameOverModal(title, msg, details, icon);
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Intelligence Artificielle (IA) - Algorithme Minimax
+  // ═══════════════════════════════════════════════════════════════════════════
+  function playAICoup() {
+    if (gameOver || isAnimating) return;
+    
+    const validMoves = getValidMoves(board, 1);
+    if (validMoves.length === 0) return; // Sécurité
+
+    let chosenCol = validMoves[0];
+
+    if (aiDifficulty === 'easy') {
+      // 1. Facile : Choix purement aléatoire parmi les coups valides
+      const idx = Math.floor(Math.random() * validMoves.length);
+      chosenCol = validMoves[idx];
+    } 
+    else if (aiDifficulty === 'medium') {
+      // 2. Moyen : Recherche gloutonne à profondeur 1 (meilleur score immédiat)
+      let bestScore = -999;
+      let candidates = [];
+      
+      for (let col of validMoves) {
+        const sim = simulateMove(board, scores, 1, col);
+        const diff = sim.scores[1] - sim.scores[0]; // Score IA - Score J1
+        
+        if (diff > bestScore) {
+          bestScore = diff;
+          candidates = [col];
+        } else if (diff === bestScore) {
+          candidates.push(col);
+        }
+      }
+      // Choix aléatoire parmi les meilleurs égaux
+      chosenCol = candidates[Math.floor(Math.random() * candidates.length)];
+    } 
+    else {
+      // 3. Expert : Algorithme Minimax à profondeur 3 avec élagage Alpha-Beta
+      let bestVal = -Infinity;
+      let bestMoves = [];
+      
+      for (let col of validMoves) {
+        const sim = simulateMove(board, scores, 1, col);
+        // Profondeur 2 restante pour l'adversaire et l'IA
+        const val = minimax(sim.board, sim.scores, 2, -Infinity, Infinity, false);
+        
+        if (val > bestVal) {
+          bestVal = val;
+          bestMoves = [col];
+        } else if (val === bestVal) {
+          bestMoves.push(col);
+        }
+      }
+      chosenCol = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+    }
+
+    // Exécuter le coup choisi par l'IA
+    executeMove(chosenCol);
+  }
+
+  // Algorithme Minimax récursif avec élagage Alpha-Beta
+  function minimax(boardState, scoresState, depth, alpha, beta, isMaximizing) {
+    // 1. Condition d'arrêt
+    const moves0 = getValidMoves(boardState, 0);
+    const moves1 = getValidMoves(boardState, 1);
+    
+    const isOver = (moves0.length === 0 || moves1.length === 0);
+    
+    if (depth === 0 || isOver) {
+      return evaluateBoard(boardState, scoresState, isOver);
+    }
+
+    if (isMaximizing) {
+      // Tour de l'IA (Joueur 1)
+      let maxEval = -Infinity;
+      for (let col of moves1) {
+        const nextState = simulateMove(boardState, scoresState, 1, col);
+        const evalVal = minimax(nextState.board, nextState.scores, depth - 1, alpha, beta, false);
+        maxEval = Math.max(maxEval, evalVal);
+        alpha = Math.max(alpha, evalVal);
+        if (beta <= alpha) break; // Élagage
+      }
+      return maxEval;
+    } else {
+      // Tour de l'Humain (Joueur 0)
+      let minEval = Infinity;
+      for (let col of moves0) {
+        const nextState = simulateMove(boardState, scoresState, 0, col);
+        const evalVal = minimax(nextState.board, nextState.scores, depth - 1, alpha, beta, true);
+        minEval = Math.min(minEval, evalVal);
+        beta = Math.min(beta, evalVal);
+        if (beta <= alpha) break; // Élagage
+      }
+      return minEval;
+    }
+  }
+
+  // Fonction d'évaluation heuristique de l'état du plateau
+  function evaluateBoard(boardState, scoresState, isGameOverState) {
+    // Différence de score brute
+    let evalVal = (scoresState[1] - scoresState[0]) * 15;
+    
+    if (isGameOverState) {
+      // Si la simulation amène une fin de partie, calculer les graines ramassées
+      let extraJ1 = boardState[0].reduce((sum, s) => sum + s, 0);
+      let extraJ2 = boardState[1].reduce((sum, s) => sum + s, 0);
+      let finalJ1 = scoresState[0] + extraJ1;
+      let finalJ2 = scoresState[1] + extraJ2;
+      return (finalJ2 - finalJ1) * 100; // Forte pondération de la victoire/défaite
+    }
+
+    // Évaluer la sécurité des graines dans les camps
+    for (let c = 0; c < 7; c++) {
+      // Pénaliser l'IA pour ses cases vulnérables (1 ou 2 graines qui peuvent faire 2 ou 3)
+      if (boardState[1][c] === 1 || boardState[1][c] === 2) {
+        evalVal -= 2;
+      }
+      // Valoriser les cases de l'adversaire vulnérables à une capture par l'IA
+      if (boardState[0][c] === 1 || boardState[0][c] === 2) {
+        evalVal += 1.5;
+      }
+    }
+
+    // Légère préférence pour garder des graines dans notre camp
+    const totalAICamp = boardState[1].reduce((sum, s) => sum + s, 0);
+    const totalHumCamp = boardState[0].reduce((sum, s) => sum + s, 0);
+    evalVal += (totalAICamp - totalHumCamp) * 0.5;
+
+    return evalVal;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  //  Utilitaires d'attente (Asynchronisme)
+  // ═══════════════════════════════════════════════════════════════════════════
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+</script>
+</body>
+</html>
